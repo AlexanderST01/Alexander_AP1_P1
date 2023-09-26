@@ -2,6 +2,7 @@ using Alexander_AP1_P1.DAL;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
+using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddServerSideBlazor();
 var ConStr = builder.Configuration.GetConnectionString("ConStr");
 
 builder.Services.AddDbContext<Context>(op => op.UseSqlite(ConStr));
+builder.Services.AddScoped<NotificationService>(); 
 
 var app = builder.Build();
 
