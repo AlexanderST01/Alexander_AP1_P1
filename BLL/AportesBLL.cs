@@ -1,6 +1,7 @@
 ﻿using Alexander_AP1_P1.DAL;
 using Alexander_AP1_P1.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Alexander_AP1_P1.BLL
 {
@@ -43,6 +44,9 @@ namespace Alexander_AP1_P1.BLL
         {
             return _context.Aportes.Where(i =>i.AporteId == aportesId).AsNoTracking().FirstOrDefault();
         }
-        public 
+        public List<Aportes> GetList(Expression<Func<Aportes, bool>> criterio)
+        {
+            return _context.Aportes.AsNoTracking().Where(criterio).ToList();
+        }
     }
 }
