@@ -39,5 +39,10 @@ namespace Alexander_AP1_P1.BLL
             _context.Aportes.Entry(aportes).State = EntityState.Deleted;
             return _context.SaveChanges() > 0;
         }
+        public Aportes? Buscar(int aportesId)
+        {
+            return _context.Aportes.Where(i =>i.AporteId == aportesId).AsNoTracking().FirstOrDefault();
+        }
+        public 
     }
 }
