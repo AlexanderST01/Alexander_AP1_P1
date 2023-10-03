@@ -87,14 +87,28 @@
     {
         if (!Validar())
         {
-            var mensaje = new NotificationMessage
-                {
-                    Severity = NotificationSeverity.Error,
-                    Summary = "No Guardo",
-                    Detail = "El aporte no se ha guardado",
-                    Duration = 5_000
-                };
-            notificationSevice.Notify(mensaje);
+            if (!montoMayorCero)
+            {
+                var mensaje = new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Error,
+                        Summary = "No Eliminado",
+                        Detail = "El monto debe ser mayor a cero",
+                        Duration = 5_000
+                    };
+                notificationSevice.Notify(mensaje);
+            }
+            if (!aportesIdMayorIgualCero)
+            {
+                var mensaje = new NotificationMessage
+                    {
+                        Severity = NotificationSeverity.Error,
+                        Summary = "No Eliminado",
+                        Detail = "El Aporte ID debe ser mayor o igual a cero",
+                        Duration = 5_000
+                    };
+                notificationSevice.Notify(mensaje);
+            }
             return;
         }
         if (aportesBLL.Guardar(Aporte))
