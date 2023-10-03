@@ -1,0 +1,157 @@
+﻿@page "/ConsultaAporte"
+@inject AportesBLL aportesBLL
+@inject NotificationService notificationService
+<h3>C_Ingresos</h3>
+<div class="row">
+    <div clas="col-auto ">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="form-group col">
+                        <label>Desde</label>
+                        <InputDate @bind-Value="fechaDesde" class="form-control" />
+                    </div>
+                    <div class="form-group col">
+                        <label>Hasta</label>
+                        <InputDate @bind-Value="fechaHasta" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <label>filtrar por</label>
+                    <div class="col">
+                        <InputSelect @bind-Value="opciones">
+                            <option value="0" selected>ID</option>
+                            <option value="1">Persona</option>
+                            <option value="2">Observacion</option>
+                            <option value="3">Monto</option>
+                        </InputSelect>
+                    </div>
+                    <div class="col input-group">
+
+                        <button class="form-control oi oi-magnifying-glass" type="button" @onclick="Buscar"></button>
+                        <button class="form-control oi oi-reload" type="button" @onclick="Reiniciar"></button>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+
+                        @switch (opciones)
+                        {
+                            case 0:
+                                montoTotal = 0;
+                                <InputNumber @bind-Value="aporte.AporteId"></InputNumber>
+                                break;
+                            case 1:
+                                montoTotal = 0;
+                                <InputText @bind-Value="aporte.Persona"></InputText>
+                                break;
+                            case 2:
+                                montoTotal = 0;
+                                <InputText @bind-Value="aporte.Observacion"></InputText>
+                                break;
+                            case 3:
+                                montoTotal = 0;
+                                <InputNumber @bind-Value="aporte.Monto"></InputNumber>
+                                break;
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table-bordered table table-striped">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>Aporte ID</th>
+                            <th>Persona</th>
+                            <th>Observacion</th>
+                            <th>Monto</th>
+                            <th>Ver</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ap in aportes)
+                        {
+                            <tr>
+                                <td>@ap.AporteId</td>
+                                <td>@ap.Persona</td>
+                                <td>@ap.Observacion</td>
+                                <td>@ap.Monto</td>
+                                <td><a href="Registros/@ap.AporteId">Ver</a></td>
+                            </tr>
+                            montoTotal += ap.Monto;
+                        }
+                    </tbody>
+
+                </table>
+                <div class="row">
+                    <div class="col">
+                        <p>Conteo: @aportesBLL.GetList(i => true).Count()</p>
+                    </div>
+                    <div class="col">
+                        <p>Monto total: @montoTotal </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    public List<Aportes> aportes { get; set; } = new();
+    public DateTime fechaDesde;
+    public DateTime fechaHasta;
+    public Aportes aporte = new();
+    public int opciones;
+    public decimal montoTotal;
+
+    protected override void OnInitialized()
+    {
+        aportes = aportesBLL.GetList(i => true);
+        fechaHasta = DateTime.Now;
+        fechaDesde = DateTime.Now.AddMonths(-1);
+    }
+    public void Buscar()
+    {
+        montoTotal = 0;
+        switch (opciones)
+        {
+            case 0:
+                if (aporte.AporteId > 0)
+                    aportes = aportesBLL.GetList(i => i.AporteId == aporte.AporteId && i.Fecha >= fechaDesde.Date && i.Fecha <=
+                    fechaHasta);
+                else
+                    aportes = aportesBLL.GetList(i => i.Fecha >= fechaDesde.Date && i.Fecha <= fechaHasta);
+                break;
+
+            case 1:
+                if (!string.IsNullOrEmpty(aporte.Persona))
+                    aportes = aportesBLL.GetList(i => i.Persona.ToLower().Contains(aporte.Persona.ToLower()) && i.Fecha >=
+                    fechaDesde.Date && i.Fecha <= fechaHasta);
+                else
+                    aportes = aportesBLL.GetList(i => i.Fecha >= fechaDesde.Date && i.Fecha <= fechaHasta);
+                break;
+            case 2:
+                if (!string.IsNullOrEmpty(aporte.Observacion))
+                    aportes = aportesBLL.GetList(i => i.Observacion.ToLower().Contains(aporte.Observacion.ToLower()) && i.Fecha >=
+                    fechaDesde.Date && i.Fecha <= fechaHasta);
+                else
+                    aportes = aportesBLL.GetList(i => i.Fecha >= fechaDesde.Date && i.Fecha <= fechaHasta);
+                break;
+
+            case 3:
+                if (aporte.Monto > 0)
+                    aportes = aportesBLL.GetList(i => i.Monto == aporte.Monto && i.Fecha >= fechaDesde.Date && i.Fecha <= fechaHasta);
+                else
+                    aportes = aportesBLL.GetList(i => i.Fecha >= fechaDesde.Date && i.Fecha <= fechaHasta);
+                break;
+        }
+    }
+    public void Reiniciar()
+    {
+        montoTotal = 0;
+        aportes = aportesBLL.GetList(i => true);
+    }
+
+}

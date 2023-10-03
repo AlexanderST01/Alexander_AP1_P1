@@ -1,4 +1,5 @@
 ﻿@page "/Registros"
+@page "/Registros/{AportesId:int}"
 @inject AportesBLL aportesBLL
 @inject NotificationService notificationSevice
 <EditForm Model="Aporte" OnValidSubmit="Guardar">
