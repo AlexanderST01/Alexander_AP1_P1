@@ -24,7 +24,7 @@ namespace Alexander_AP1_P1.BLL
         public bool Modificar(Aportes aportes)
         {
             _context.Aportes.Entry(_context.Aportes.Find(aportes.AporteId)!).State = EntityState.Detached;
-            _context.Aportes.Entry(aportes).State = EntityState.Modified;
+            _context.Aportes.Entry(_context.Aportes.Find(aportes)!).State = EntityState.Modified;
             return _context.SaveChanges() > 0;
         }
         public bool Guardar(Aportes aportes)
@@ -37,7 +37,7 @@ namespace Alexander_AP1_P1.BLL
         public bool Eliminar(Aportes aportes)
         {
             _context.Aportes.Entry(_context.Aportes.Find(aportes.AporteId)!).State = EntityState.Detached;
-            _context.Aportes.Entry(aportes).State = EntityState.Deleted;
+            _context.Aportes.Entry(_context.Aportes.Find(aportes)!).State = EntityState.Deleted;   
             return _context.SaveChanges() > 0;
         }
         public Aportes? Buscar(int aportesId)
