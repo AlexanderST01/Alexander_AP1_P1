@@ -165,7 +165,7 @@
     bool Validar()
     {
         aportesIdMayorIgualCero = Aporte.AporteId >= 0;
-        montoMayorCero = Aporte.Monto <= 0;
+        montoMayorCero = Aporte.Monto >= 0;
         return aportesIdMayorIgualCero || montoMayorCero;
 
     }
