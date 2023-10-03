@@ -1,3 +1,4 @@
+using Alexander_AP1_P1.BLL;
 using Alexander_AP1_P1.DAL;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -13,6 +14,7 @@ var ConStr = builder.Configuration.GetConnectionString("ConStr");
 
 builder.Services.AddDbContext<Context>(op => op.UseSqlite(ConStr));
 builder.Services.AddScoped<NotificationService>(); 
+builder.Services.AddScoped<AportesBLL>();
 
 var app = builder.Build();
 
